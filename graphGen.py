@@ -215,22 +215,24 @@ def nextVertex(adjList, xArray, root, kArray):
 
 # --- "h" dla grafu hamiltonowskiego cokolwiek innego dla niehamiltonowskiego ---#
 
-adjList1 = graphGen(10, 0.5, "nh")
+# TESTING
 
-sum = 0
-for k, v in adjList1.items():
-    sum += len(v)
-    print(f"{k}: {v} -> {len(v)} == {sum}")
+# adjList1 = graphGen(10, 0.5, "nh")
 
-adjMat = intoMatrix(adjList1)
+# sum = 0
+# for k, v in adjList1.items():
+#     sum += len(v)
+#     print(f"{k}: {v} -> {len(v)} == {sum}")
 
-graph = open("graphStorage", "w")
+# adjMat = intoMatrix(adjList1)
 
-for x in range(len(adjMat)):
-    print(*adjMat[x])
-    for i in adjMat[x]:
-        graph.write(str(i) + " ")
-    graph.write("\n")
+# graph = open("graphStorage", "w")
 
-print("\n")
-hierholzEulerFinder(adjList1)
+# for x in range(len(adjMat)):
+#     print(*adjMat[x])
+#     for i in adjMat[x]:
+#         graph.write(str(i) + " ")
+#     graph.write("\n")
+
+# print("\n")
+# backTrackHam(adjList1)
