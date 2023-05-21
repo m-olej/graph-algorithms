@@ -114,11 +114,15 @@ def hierholzEulerFinder(adjList):
         ranks[k] = len(v)
         if len(v) % 2 != 0:
             check += 1
+            unEvenVert = k
 
     currPath = []  # 1 is a starting point, which doesn't matter
     circuit = []
 
-    curr = 1
+    if check == 0:
+        curr = 1
+    elif check == 2:
+        curr = unEvenVert
 
     currPath.append(curr)
 
@@ -138,22 +142,20 @@ def hierholzEulerFinder(adjList):
 
     # -- printing circuit -- #
     if check == 0:
-        print("The Eulerian circuit: ", end="")
+        print("Cykl Eulera: ", end="")
         for x in range(0, len(circuit)):
             if x != len(circuit)-1:
                 print(circuit[x], end=" -> ")
             else:
                 print(circuit[x])
     elif check == 2:
-        print("The Eulerian Path: ", end="")
+        print("Scieżka Eulera: ", end="")
         for x in range(0, len(circuit)):
             if x != len(circuit)-1:
                 print(circuit[x], end=" -> ")
             else:
                 print(circuit[x])
     return
-
-# - Robert's Fleury's algorithm for Euler's circuits - #
 
 # --- backtracking Hamiltonian circuit finder --- #
 
@@ -213,7 +215,7 @@ def nextVertex(adjList, xArray, root, kArray):
 
 # --- "h" dla grafu hamiltonowskiego cokolwiek innego dla niehamiltonowskiego ---#
 
-adjList1 = graphGen(10, 0.5, "h")
+adjList1 = graphGen(10, 0.5, "nh")
 
 sum = 0
 for k, v in adjList1.items():
@@ -232,8 +234,3 @@ for x in range(len(adjMat)):
 
 print("\n")
 hierholzEulerFinder(adjList1)
-
-sum = 0
-for k, v in adjList1.items():
-    sum += len(v)
-    print(f"{k}: {v} -> {len(v)} == {sum}")
