@@ -122,6 +122,12 @@ def isEulerian(adjList, connected):
         return 0
 
 
+def isValidGraph(adjMat):
+    for v in range(len(adjMat)):
+        for w in range(len(adjMat[v])):
+            if adjMat[v][w] != adjMat[w][v]:
+                return 0
+    return 1
 # -- Hierholz euler cycle finder --- #
 
 
