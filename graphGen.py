@@ -2,6 +2,8 @@ import random
 import math
 import sys
 import copy
+from scipy.sparse.csgraph import laplacian
+import numpy as np
 
 sys.setrecursionlimit(10000000)
 
@@ -87,24 +89,41 @@ def intoMatrix(adjList):
     return adjMat
 
 
-def isEulerian(adjList):
+def intoAdjList(adjMat):
+    adjList = {}
+    for v in range(len(adjMat)):
+        adjList[v+1] = []
+        for w in range(len(adjMat[v])):
+            if adjMat[v][w] == 1:
+                adjList[v+1].append(w+1)
+    return adjList
+
+
+def isEulerian(adjList, connected):
     # --- Ustalanie stopni wierzchołków --- #
-    uneven = []
+    uneven = 0
+    loop = 0
     for k, v in adjList.items():
-        if v % 2 != 0:
-            uneven.append(k)
-    # --- check for error --- #
-    if len(uneven) == 2:
-        start = uneven[random.randint(0, 1)]
-        return start
-    elif len(uneven) == 0:
-        start = adjList[random.randint(1, len(adjList))]
-        return start
+        if len(v) % 2 != 0:
+            uneven += 1
+        if k in v:
+            loop += 1
+
+    if uneven == 0 and connected:
+        print("Ten graf ma cykl Eulera (graf eulerowski)")
+        return 1
+    elif uneven == 2 and connected:
+        print("Ten graf ma tylko ścieżkę Eulera (graf półeulerowski)")
+        return 1
     else:
-        return False
+        if loop != 0:
+            print("Ten graf posiada pętlę własną !!!")
+        print("Ten graf nie jest Eulerowski")
+        return 0
 
 
 # -- Hierholz euler cycle finder --- #
+
 
 def hierholzEulerFinder(adjList):
     adjList1 = copy.deepcopy(adjList)
@@ -236,3 +255,24 @@ def nextVertex(adjList, xArray, root, kArray):
 
 # print("\n")
 # backTrackHam(adjList1)
+
+# adjList1 = graphGen(10, 0.5, "h")
+
+# sum = 0
+# for k, v in adjList1.items():
+#     sum += len(v)
+#     print(f"{k}: {v} -> {len(v)} == {sum}")
+
+# adjMat = intoMatrix(adjList1)
+# print("\n")
+# for x in range(len(adjMat)):
+#     print(*adjMat[x])
+
+# unconnected = [[0, 1, 1, 0, 0, 0, 0], [1, 0, 1, 1, 0, 0, 0,], [1, 1, 0, 0, 1, 0, 0], [
+#     0, 1, 0, 0, 1, 0, 0], [0, 0, 1, 1, 0, 0, 0], [0, 0, 0, 0, 0, 0, 1], [0, 0, 0, 0, 0, 1, 0]]
+
+# laplac = laplacian(np.array(unconnected))
+# fiedlers, v = np.linalg.eig(laplac)
+# fiedlers.sort()
+# print(laplac)
+# print(fiedlers[1])
