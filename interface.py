@@ -45,7 +45,7 @@ while True:
         for w in range(len(adjMat)):
             print(*adjMat[w])
         # --- ustalanie czy graf jest spójny --- #
-        laplac = laplacian(np.array(unconnected))
+        laplac = laplacian(np.array(adjMat))
         fiedlers, v = np.linalg.eig(laplac)
         fiedlers.sort()
         fiedlerNum = fiedlers[1]
