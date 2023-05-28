@@ -4,8 +4,9 @@ import sys
 import copy
 from scipy.sparse.csgraph import laplacian
 import numpy as np
+from szynkowane import *
 
-sys.setrecursionlimit(10000000)
+sys.setrecursionlimit(1000000)
 
 
 def graphGen(n, p, h):
@@ -21,6 +22,10 @@ def graphGen(n, p, h):
         elif h == "h":
             adjList[vetrices[x]].append(vetrices[0])
             adjList[vetrices[0]].append(vetrices[x])
+        elif h != "h":
+            rm = adjList[vetrices[x]].pop()
+            adjList[rm].remove(vetrices[x])
+            vetrices.pop()
         edgeNum -= 1
 
     while edgeNum > 0:
@@ -36,7 +41,7 @@ def graphGen(n, p, h):
         # outVert = random.sample(vetrices, length)
 
         fail = False
-        outVert = [random.randint(1, n)]
+        outVert = random.sample(vetrices, 1)
         while len(outVert) < length:
             if len(outVert) == length-1:
                 vetricesEx = vetrices[:]
@@ -182,6 +187,7 @@ def hierholzEulerFinder(adjList):
                 print(circuit[x])
     return
 
+
 # --- backtracking Hamiltonian circuit finder --- #
 
 
@@ -200,7 +206,7 @@ def backTrackHam(adjList, first=True, root=0, xArray=[], kArray=[]):
     # -- #
 
     check = nextVertex(adjList, xArray, root, kArray)
-
+    print(root)
     if 0 not in xArray and check == 1:
         if xArray[0] in adjList[xArray[-1]]:
             print(xArray + [xArray[0]])
@@ -210,8 +216,9 @@ def backTrackHam(adjList, first=True, root=0, xArray=[], kArray=[]):
             backTrackHam(adjList, False, root-1, xArray, kArray)
     elif root < len(adjList)-1 and check == 1:
         backTrackHam(adjList, False, root+1, xArray, kArray)
-    elif root < len(adjList)-1 and check == 0:
+    elif root > 0 and check == 0:
         backTrackHam(adjList, False, root-1, xArray, kArray)
+    return "No cycle to Be Found"
 
 
 def nextVertex(adjList, xArray, root, kArray):
@@ -242,25 +249,26 @@ def nextVertex(adjList, xArray, root, kArray):
 
 # TESTING
 
-# adjList1 = graphGen(10, 0.5, "nh")
+adjList1 = graphGen(10, 0.5, "h")
 
-# sum = 0
-# for k, v in adjList1.items():
-#     sum += len(v)
-#     print(f"{k}: {v} -> {len(v)} == {sum}")
+sum = 0
+for k, v in adjList1.items():
+    sum += len(v)
+    print(f"{k}: {v} -> {len(v)} == {sum}")
 
-# adjMat = intoMatrix(adjList1)
+adjMat = intoMatrix(adjList1)
 
-# graph = open("graphStorage", "w")
+graph = open("graphStorage", "w")
 
-# for x in range(len(adjMat)):
-#     print(*adjMat[x])
-#     for i in adjMat[x]:
-#         graph.write(str(i) + " ")
-#     graph.write("\n")
+for x in range(len(adjMat)):
+    print(*adjMat[x])
+    for i in adjMat[x]:
+        graph.write(str(i) + " ")
+    graph.write("\n")
 
 # print("\n")
-# backTrackHam(adjList1)
+ch = hierholzEulerFinder(adjList1)
+# print(ch)
 
 # adjList1 = graphGen(10, 0.5, "h")
 

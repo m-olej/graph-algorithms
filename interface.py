@@ -24,12 +24,12 @@ while True:
             sum = 0
             for k, v in adjList1.items():
                 sum += len(v)
-            if h == "h" and abs(sum - (n*(n-1))*p) <= 1:
+            if h == "h" and abs(sum - (n*(n-1))*p) <= 5:
                 for k, v in adjList1.items():
                     print(f"{k}: {v} -> {len(v)}")
                 print(sum)
                 done = True
-            elif h != "h" and abs(sum - (n*(n-1))*p)-2 <= 1:
+            elif h != "h" and abs(sum - (n*(n-1))*p)-2 <= 5:
                 for k, v in adjList1.items():
                     print(f"{k}: {v} -> {len(v)}")
                 print(sum)
